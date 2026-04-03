@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Ideology Sphere | Neutral & Structured Knowledge</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #07080f;
+      --bg-secondary: #0d0f1c;
+      --card-bg: #111428;
+      --card-hover: #161a35;
+      --text-primary: #eef0f8;
+      --text-secondary: #8b90b8;
+      --accent-red: #ff3d5a;
+      --accent-blue: #4d8eff;
+      --accent-green: #00d68f;
+      --accent-gold: #f5c842;
+      --accent-purple: #9b5de5;
+      --border-light: rgba(255,255,255,0.07);
+      --shadow-glow: 0 0 40px rgba(77,142,255,0.12);
+      --shadow-md: 0 8px 32px rgba(0,0,0,0.45);
+      --navbar-bg: rgba(7,8,15,0.92);
+      --hover-bg: rgba(77,142,255,0.1);
+      --gradient-hero: linear-gradient(135deg, #ff3d5a 0%, #4d8eff 50%, #00d68f 100%);
+      --gradient-card: linear-gradient(135deg, rgba(77,142,255,0.08) 0%, rgba(155,93,229,0.05) 100%);
+    }
+
+    body.light {
+      --bg-primary: #f0f2fa;
+      --bg-secondary: #ffffff;
+      --card-bg: #ffffff;
+      --card-hover: #f5f7ff;
+      --text-primary: #0a0d1f;
+      --text-secondary: #4a4f7a;
+      --border-light: rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 32px rgba(0,0,0,0.1);
+      --navbar-bg: rgba(240,242,250,0.95);
+      --hover-bg: rgba(77,142,255,0.08);
+      --gradient-card: linear-gradient(135deg, rgba(77,142,255,0.05) 0%, rgba(155,93,229,0.03) 100%);
+      --shadow-glow: 0 0 40px rgba(77,142,255,0.08);
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* BG mesh */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 10% 10%, rgba(255,61,90,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 90% 90%, rgba(77,142,255,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 50% 50%, rgba(0,214,143,0.04) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body.light::before {
+      background:
+        radial-gradient(ellipse 80% 50% at 10% 10%, rgba(255,61,90,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 90% 90%, rgba(77,142,255,0.05) 0%, transparent 60%);
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; width: 100%;
+      background: var(--navbar-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-light);
+      z-index: 1000;
+      padding: 0.85rem 0;
+      transition: all 0.3s;
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: var(--gradient-hero);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+    }
+
+    .logo img {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(77,142,255,0.4);
+      box-shadow: 0 0 14px rgba(77,142,255,0.3);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 2px;
+      background: var(--accent-blue);
+      border-radius: 2px;
+      transition: width 0.25s;
+    }
+
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .theme-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 2rem;
+      padding: 0.45rem 1rem;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.85rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      color: var(--text-primary);
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 12px rgba(77,142,255,0.2);
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-primary);
+    }
+
+    /* ===== SEARCH ===== */
+    .search-wrapper {
+      margin-top: 5.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      max-width: 580px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: var(--card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 60px;
+      padding: 0.7rem 1.4rem;
+      gap: 0.7rem;
+      box-shadow: var(--shadow-md), var(--shadow-glow);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-box:focus-within {
+      border-color: var(--accent-blue);
+      box-shadow: var(--shadow-md), 0 0 0 3px rgba(77,142,255,0.15);
+    }
+
+    .search-box i { color: var(--text-secondary); }
+
+    .search-box input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 0.97rem;
+      color: var(--text-primary);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .search-box input::placeholder { color: var(--text-secondary); }
+
+    .suggestions-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0; right: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 1rem;
+      z-index: 200;
+      max-height: 280px;
+      overflow-y: auto;
+      box-shadow: var(--shadow-md);
+    }
+
+    .suggestion-item {
+      padding: 0.8rem 1.3rem;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.93rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .suggestion-item:last-child { border-bottom: none; }
+    .suggestion-item:hover { background: var(--hover-bg); }
+
+    /* ===== HERO ===== */
+    .hero {
+      text-align: center;
+      padding: 2.5rem 0 4rem;
+      animation: fadeSlideUp 0.8s cubic-bezier(.22,.68,0,1.2) both;
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(77,142,255,0.1);
+      border: 1px solid rgba(77,142,255,0.25);
+      color: var(--accent-blue);
+      padding: 0.35rem 1rem;
+      border-radius: 2rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 800;
+      background: var(--gradient-hero);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+      line-height: 1.15;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      font-weight: 300;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 800;
+      background: var(--gradient-hero);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+      border: none;
+      padding: 0.85rem 2.2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      font-size: 0.97rem;
+      font-family: 'DM Sans', sans-serif;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(77,142,255,0.3);
+      letter-spacing: 0.02em;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(77,142,255,0.4);
+    }
+
+    /* ===== SECTION TITLE ===== */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 2.5rem 0 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: var(--text-primary);
+    }
+
+    .section-title::before {
+      content: '';
+      display: block;
+      width: 5px;
+      height: 1.6em;
+      background: var(--gradient-hero);
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    /* ===== CATEGORIES GRID ===== */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .category-card {
+      background: var(--gradient-card);
+      background-color: var(--card-bg);
+      border-radius: 1.4rem;
+      padding: 2rem 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(.22,.68,0,1.2);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .category-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .category-card.political::before {
+      background: radial-gradient(ellipse at top, rgba(255,61,90,0.12) 0%, transparent 70%);
+    }
+    .category-card.social::before {
+      background: radial-gradient(ellipse at top, rgba(77,142,255,0.12) 0%, transparent 70%);
+    }
+    .category-card.philosophical::before {
+      background: radial-gradient(ellipse at top, rgba(0,214,143,0.12) 0%, transparent 70%);
+    }
+    .category-card.cultural::before {
+      background: radial-gradient(ellipse at top, rgba(245,200,66,0.12) 0%, transparent 70%);
+    }
+
+    .category-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-md), var(--shadow-glow);
+    }
+    .category-card:hover::before { opacity: 1; }
+
+    .category-card.political:hover { border-color: var(--accent-red); }
+    .category-card.social:hover { border-color: var(--accent-blue); }
+    .category-card.philosophical:hover { border-color: var(--accent-green); }
+    .category-card.cultural:hover { border-color: var(--accent-gold); }
+
+    .category-icon {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .category-card.political .category-icon { color: var(--accent-red); }
+    .category-card.social .category-icon { color: var(--accent-blue); }
+    .category-card.philosophical .category-icon { color: var(--accent-green); }
+    .category-card.cultural .category-icon { color: var(--accent-gold); }
+
+    .category-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+
+    .category-card p {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      position: relative;
+    }
+
+    .category-pill {
+      display: inline-block;
+      margin-top: 0.8rem;
+      padding: 0.25rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      position: relative;
+    }
+
+    .category-card.political .category-pill { background: rgba(255,61,90,0.12); color: var(--accent-red); }
+    .category-card.social .category-pill { background: rgba(77,142,255,0.12); color: var(--accent-blue); }
+    .category-card.philosophical .category-pill { background: rgba(0,214,143,0.12); color: var(--accent-green); }
+    .category-card.cultural .category-pill { background: rgba(245,200,66,0.12); color: var(--accent-gold); }
+
+    /* ===== DYNAMIC AREAS ===== */
+    .dynamic-area {
+      margin: 2rem 0;
+      background: var(--card-bg);
+      border-radius: 1.4rem;
+      padding: 2rem;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-md);
+      animation: fadeSlideUp 0.4s ease both;
+    }
+
+    .ideology-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 1.2rem;
+    }
+
+    .ideology-tag {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-light);
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ideology-tag:hover {
+      background: var(--accent-blue);
+      color: white;
+      border-color: var(--accent-blue);
+      transform: scale(1.04);
+      box-shadow: 0 4px 16px rgba(77,142,255,0.3);
+    }
+
+    .back-btn {
+      background: transparent;
+      border: 1px solid var(--border-light);
+      padding: 0.45rem 1.1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      margin-bottom: 1.2rem;
+      color: var(--text-secondary);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    /* ===== IDEOLOGY DETAIL ===== */
+    .ideology-detail-card {
+      background: var(--bg-secondary);
+      border-radius: 1.2rem;
+      padding: 2rem;
+      border: 1px solid var(--border-light);
+    }
+
+    .ideology-detail-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .detail-section {
+      margin-top: 1.5rem;
+    }
+
+    .detail-section h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .detail-section p, .detail-section li {
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .detail-section ul {
+      padding-left: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .pros-cons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .pros-box, .cons-box {
+      border-radius: 0.8rem;
+      padding: 1rem 1.2rem;
+    }
+
+    .pros-box {
+      background: rgba(0,214,143,0.07);
+      border: 1px solid rgba(0,214,143,0.15);
+    }
+
+    .cons-box {
+      background: rgba(255,61,90,0.07);
+      border: 1px solid rgba(255,61,90,0.15);
+    }
+
+    .pros-box h4 { color: var(--accent-green); margin-bottom: 0.5rem; font-size: 0.9rem; }
+    .cons-box h4 { color: var(--accent-red); margin-bottom: 0.5rem; font-size: 0.9rem; }
+    .pros-box li, .cons-box li { font-size: 0.88rem; color: var(--text-secondary); }
+
+    .thinkers-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .thinker-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      padding: 0.6rem 0.8rem;
+      background: var(--hover-bg);
+      border-radius: 0.6rem;
+    }
+
+    .thinker-item i { color: var(--accent-purple); margin-top: 2px; flex-shrink: 0; }
+
+    .books-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .book-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    .book-item i { color: var(--accent-gold); margin-top: 2px; flex-shrink: 0; }
+
+    .examples-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .example-chip {
+      background: rgba(155,93,229,0.1);
+      border: 1px solid rgba(155,93,229,0.2);
+      color: var(--accent-purple);
+      padding: 0.3rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+
+    .cat-tag {
+      display: inline-block;
+      padding: 0.3rem 0.9rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      margin-top: 5rem;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-light);
+      padding: 2.5rem 0;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      background: var(--gradient-hero);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 0.3rem;
+    }
+
+    .footer-email {
+      color: var(--accent-blue);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    footer p { color: var(--text-secondary); font-size: 0.9rem; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: var(--navbar-bg);
+        padding: 1rem 0;
+        gap: 0.8rem;
+        margin-top: 0.5rem;
+        border-top: 1px solid var(--border-light);
+      }
+      .nav-links.active { display: flex; }
+      .hamburger { display: block; }
+      .hero h1 { font-size: 2rem; }
+      .pros-cons-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 1.5rem; }
+      .search-wrapper { margin-top: 5rem; }
+      .section-title { font-size: 1.4rem; }
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+    /* divider */
+    .divider {
+      height: 1px;
+      background: var(--border-light);
+      margin: 2rem 0;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-container">
+      <div class="logo">
+        <img src="https://drive.google.com/thumbnail?id=1IJWdWUbttN0B43yb3-QorMYPGbOfVNOG" alt="Ideology Sphere Logo" onerror="this.style.display='none'">
+        Ideology Sphere
+      </div>
+      <div class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></div>
+      <div class="nav-links" id="navLinks">
+        <a href="#" id="homeLink"><i class="fas fa-home"></i> Home</a>
+        <a href="#" id="ideologiesLink"><i class="fas fa-layer-group"></i> Ideologies</a>
+        <button class="theme-toggle" id="darkModeToggle"><i class="fas fa-circle-half-stroke"></i> <span>Light/Dark</span></button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+
+      <!-- Search Bar -->
+      <div class="search-wrapper">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Search any ideology... (e.g., Capitalism, Stoicism)" autocomplete="off">
+        </div>
+        <div id="suggestionsList" class="suggestions-dropdown" style="display: none;"></div>
+      </div>
+
+      <!-- Hero Section -->
+      <section class="hero" id="heroSection">
+        <div class="hero-badge"><i class="fas fa-bolt"></i> 17 Ideologies Covered</div>
+        <h1>Explore the World<br>of Ideologies</h1>
+        <p>A neutral, structured knowledge base to help you understand every major political, social, philosophical and cultural ideology.</p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-num">17</div>
+            <div class="stat-label">Ideologies</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">4</div>
+            <div class="stat-label">Categories</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">60+</div>
+            <div class="stat-label">Key Thinkers</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">50+</div>
+            <div class="stat-label">Book Recs</div>
+          </div>
+        </div>
+        <button class="btn-primary" id="startLearningBtn"><i class="fas fa-graduation-cap"></i>&nbsp; Start Learning</button>
+      </section>
+
+      <!-- Categories -->
+      <div>
+        <h2 class="section-title"><i class="fas fa-folder-open" style="font-size:1.2rem"></i> Knowledge Folders</h2>
+        <div class="categories-grid" id="categoriesGrid"></div>
+      </div>
+
+      <!-- Folder ideologies list -->
+      <div id="categoryIdeologiesContainer" class="dynamic-area" style="display: none;">
+        <button class="back-btn" id="clearCategoryView"><i class="fas fa-arrow-left"></i> Back to Folders</button>
+        <h3 id="categoryTitle" style="font-family:'Playfair Display',serif; font-size:1.4rem;"></h3>
+        <div id="ideologiesInCategoryList" class="ideology-list"></div>
+      </div>
+
+      <!-- Ideology detail -->
+      <div id="ideologyDetailContainer" class="dynamic-area" style="display: none;">
+        <button class="back-btn" id="closeIdeologyView"><i class="fas fa-home"></i> Back to Home</button>
+        <div id="ideologyDetailContent" class="ideology-detail-card"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo"><i class="fas fa-brain"></i> Ideology Sphere</div>
+        <p><i class="fas fa-exclamation-triangle"></i> Complaints or Reports</p>
+        <p>If you experience any problems or have any concerns, please reach out:</p>
+        <p class="footer-email"><i class="fas fa-envelope"></i> shambhujaiswar28@gmail.com</p>
+        <p style="margin-top:0.5rem; font-size:0.8rem; opacity:0.5;">© 2025 Ideology Sphere · Neutral & Structured Knowledge</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // =============================== FULL IDEOLOGIES DATABASE ===============================
+    const ideologiesDB = [
+      // ── POLITICAL ──────────────────────────────────────────────────────────────────────────
+      {
+        name: "Anarchism",
+        category: "Political Ideologies",
+        catClass: "political",
+        description: "A political belief that society should be organized without any rulers or government. It argues that people are capable of living together peacefully and fairly through voluntary cooperation, rather than being forced by laws and police.",
+        quickSummary: "\"What if a society could exist with no government at all?\" Anarchism is a political belief that society should be organized without any rulers or government. It argues that people are capable of living together peacefully through voluntary cooperation.",
+        coreIdea: "The word 'Anarchy' comes from the Greek word anarkhos, which literally means 'without a ruler.' Most people think anarchy means 'chaos' or 'no rules,' but for anarchists, it actually means 'no bosses.' Anarchists believe that all hierarchies (systems where one person has power over another) are naturally harmful. Decisions are made by the people actually affected by them, through local meetings and mutual agreement.",
+        examples: ["A Group Project – working without a 'captain', naturally dividing tasks", "Open Source Software – Linux, Wikipedia, built freely by contributors", "Mutual Aid – neighbours sharing food and shelter after a flood without government direction"],
+        thinkers: [
+          { name: "Mikhail Bakunin", idea: "Argued that the State is the source of all evil and must be abolished for true freedom." },
+          { name: "Peter Kropotkin", idea: "Scientist who wrote 'Mutual Aid' – humans and animals survive better through cooperation." },
+          { name: "Pierre-Joseph Proudhon", idea: "First person to call himself an 'Anarchist.' Famously said, 'Property is theft!'" },
+          { name: "Emma Goldman", idea: "Focused on how anarchism could give women and workers total freedom from restrictive society." }
+        ],
+        pros: ["Absolute Freedom – you are master of your own life", "End of Corruption – no high-level positions for politicians to abuse", "Community Focus – people rely on each other, not a distant government", "True Equality – resources shared based on actual need", "Creativity & Innovation – no bosses means freedom to experiment"],
+        cons: ["Difficulty Scaling – hard for 50 million people to coordinate without central leadership", "Safety Concerns – no professional police or courts to settle complex disputes", "Vulnerability – easily invaded by an organised neighbouring army", "Free Rider Problem – some may do nothing while taking from communal resources", "Risk of Chaos – critics argue society would fall into 'survival of the fittest'"],
+        realWorldExamples: ["Revolutionary Catalonia (1936) – anarchist workers managed factories and farms successfully for several years", "The Zapatistas (Chiapas, Mexico) – governing themselves without the Mexican government since 1990s", "Rojava (Syria) – practicing Democratic Confederalism with local councils and women's rights", "The Early Internet – no one 'owned' it; everyone created and shared freely"],
+        books: [
+          { title: "The Conquest of Bread", author: "Peter Kropotkin", note: "The manual for how an anarchist society could feed and house everyone." },
+          { title: "Anarchism and Other Essays", author: "Emma Goldman", note: "How anarchism connects to daily life and personal freedom." },
+          { title: "The Dispossessed", author: "Ursula K. Le Guin", note: "Science-fiction novel imagining a functioning anarchist society." }
+        ]
+      },
+      {
+        name: "Capitalism",
+        category: "Political Ideologies",
+        catClass: "political",
+        description: "An economic system where private individuals and companies, rather than the government, own and control businesses and property. The main engine behind this system is profit – people are free to compete to make as much money as they can.",
+        quickSummary: "Capitalism is an economic system where private individuals and companies own and control businesses. The main engine is profit and free market competition.",
+        coreIdea: "The 'big secret' of capitalism is the Free Market. Think of it like a giant sports league where anyone can start a team. If you make a product people love, you get rich. If your product is bad or too expensive, you go out of business. Everything is decided by Supply and Demand.",
+        examples: ["The Smartphone Wars – Apple and Samsung competing for better cameras", "Fast Food – McDonald's, KFC, local restaurants competing on price and taste", "Freelancing – setting your own prices and working for whoever pays most"],
+        thinkers: [
+          { name: "Adam Smith", idea: "'Father of Economics.' Argued when individuals look out for their own interests, they accidentally help society – the 'Invisible Hand.'" },
+          { name: "Milton Friedman", idea: "A huge fan of the Free Market. Believed government should stay out of business as much as possible." }
+        ],
+        pros: ["Rapid Innovation – huge financial reward for 'the next big thing'", "Consumer Choice – thousands of options for everything", "Efficiency – private companies have to be efficient to survive", "Individual Freedom – the right to start any business and keep earnings", "Economic Growth – historically fastest rise in Standard of Living"],
+        cons: ["Inequality – naturally creates billionaires while others struggle to pay rent", "Monopolies – one giant company can crush all competition", "Environmental Impact – profit motive may ignore pollution and climate change", "No Safety Net – in pure capitalism, losing a job or getting sick can be catastrophic", "Boom and Bust Cycles – economy can swing from booming to recession very suddenly"],
+        realWorldExamples: ["United States – prioritises private business, entrepreneurship, lower government interference", "Singapore – one of the 'freest' markets in the world with very low taxes", "South Korea – transformed from poverty to global tech leader via massive private corporations (Samsung, LG)", "Hong Kong – historically considered the 'purest' form of capitalism"],
+        books: [
+          { title: "The Wealth of Nations", author: "Adam Smith", note: "The 'Bible' of capitalism. Explains why some nations are rich and others are poor." },
+          { title: "Capitalism and Freedom", author: "Milton Friedman", note: "Classic argument for why economic freedom is necessary for political freedom." },
+          { title: "Atlas Shrugged", author: "Ayn Rand", note: "Famous novel celebrating the 'individual creator' and warning against government control." }
+        ]
+      },
+      {
+        name: "Communism",
+        category: "Political Ideologies",
+        catClass: "political",
+        description: "An ideology that dreams of a 'classless society.' In a perfect communist world, there is no private property, no money, and no government. Everything is shared equally among the people based on what they need.",
+        quickSummary: "Communism dreams of a classless society with no private property, no money, and no government. According to Marx, communism is the final stage that comes after socialism.",
+        coreIdea: "While Socialism says the government should manage things for the people, Communism goes a step further. It envisions a world where the workers own everything together. The ultimate goal is a point where society is so organised and fair that we don't even need a government or money anymore. People work because they take pride in their contribution. Based on the famous rule: 'Work as much as you can, take only what you need.'",
+        examples: ["The Family Model – parents don't 'sell' dinner to kids; everyone contributes and eats from the same pot", "A Community Garden – everyone works on one big garden and shares the vegetables at the end of the week"],
+        thinkers: [
+          { name: "Karl Marx", idea: "Believed history is one big 'class struggle' between the rich (Bourgeoisie) and the poor (Proletariat)." },
+          { name: "Friedrich Engels", idea: "Co-wrote the most famous books with Marx; provided financial support to spread these ideas." },
+          { name: "Vladimir Lenin", idea: "Led the first successful communist revolution in Russia (1917). Believed a 'Vanguard Party' was needed to guide the workers." }
+        ],
+        pros: ["No Class Conflict – everyone is 'equal'; no fighting between rich and poor", "End of Poverty – resources shared based on need; theoretically no one goes hungry", "Full Employment – every person has a job or role", "No Exploitation – no greedy boss can get rich off your hard work", "Focus on Society – building things everyone needs like hospitals and schools"],
+        cons: ["Totalitarianism – every country that tried it ended up with a violent government", "Lack of Incentive – if you get paid the same whether you work hard or sleep, many stop trying", "Economic Shortages – central plans often fail to predict what people actually need", "Loss of Freedom – cannot choose your own job, move freely, or speak out against leaders", "Historical Failure – most large-scale attempts resulted in economic collapse or extreme poverty"],
+        realWorldExamples: ["The Soviet Union (USSR) – first and largest attempt; lasted 1922–1991", "Vietnam – ruled by a Communist Party but allowing more capitalist business", "Kibbutzim – small communities where people live communally and share income successfully"],
+        books: [
+          { title: "The Communist Manifesto", author: "Marx & Engels", note: "The short pamphlet that explains the plan for revolution." },
+          { title: "State and Revolution", author: "Vladimir Lenin", note: "Explains why government needs to exist temporarily before 'perfect' communism." },
+          { title: "Animal Farm", author: "George Orwell", note: "Famous fable showing how communist revolutions can turn into dictatorships." }
+        ]
+      },
+      {
+        name: "Democracy",
+        category: "Political Ideologies",
+        catClass: "political",
+        description: "A system of government where power belongs to the people. Instead of one king or a small group making all the rules, every citizen has a voice in how the country is run, usually through voting.",
+        quickSummary: "Democracy is a system of government where the power belongs to the people. 'Democracy is not just a system, it's a responsibility.'",
+        coreIdea: "The word 'Democracy' comes from Greek words meaning 'Rule by the People.' The main idea is that everyone should have an equal say in the laws that affect their lives. Most modern democracies are 'Representative' – we vote for leaders to make decisions for us. If they do a bad job, we 'fire' them in the next election. Built on the pillars of freedom of speech, fair elections, and human rights.",
+        examples: ["Choosing a Movie – five friends vote on which movie to watch; most votes wins", "Class Representative – students vote for a classmate to represent their ideas to the teacher", "Public Protest – people gather to say they don't like a new tax, and the government listens"],
+        thinkers: [
+          { name: "John Locke", idea: "Every person has 'natural rights' to life, liberty, and property; government's only job is to protect those rights." },
+          { name: "Jean-Jacques Rousseau", idea: "The 'Social Contract' – people agree to be governed only if the government follows the 'general will' of the public." },
+          { name: "Abraham Lincoln", idea: "'Government of the people, by the people, for the people.'" },
+          { name: "John Stuart Mill", idea: "Democracy must protect the 'minority' – even if 99% want one thing, the 1% who disagree still have the right to speak." }
+        ],
+        pros: ["Protection of Rights – guarantees freedom of speech, religion, and the press", "Peaceful Power Shifts – leaders changed through ballots, not wars", "Accountability – if a leader is corrupt, people can vote them out", "Equality – every person's vote counts the same", "Civic Participation – encourages learning about the world and participating in community"],
+        cons: ["Slow Decision Making – passing a law can take months or years", "Tyranny of the Majority – the 'winning side' might make rules unfair to smaller groups", "Voter Misinformation – fake news can lead people to vote for bad leaders", "Expensive Elections – can give rich donors too much influence", "Short-Term Focus – politicians focus on things that look good before the next election"],
+        realWorldExamples: ["India – the world's largest democracy, managing elections for nearly a billion voters", "United States – a Constitutional Republic where the Constitution limits government power", "Switzerland – uses 'Direct Democracy,' where citizens vote on specific laws themselves", "Norway – often ranked the 'most democratic' country due to high freedom and transparency"],
+        books: [
+          { title: "The Social Contract", author: "Jean-Jacques Rousseau", note: "Classic look at why people choose to live together in a fair society." },
+          { title: "On Liberty", author: "John Stuart Mill", note: "Why protecting individual freedom is the most important part of any system." },
+          { title: "The Federalist Papers", author: "Hamilton, Madison & Jay", note: "The 'instruction manual' for how the American democratic system was built." }
+        ]
+      },
+      {
+        name: "Fascism",
+        category: "Political Ideologies",
+        catClass: "political",
+        description: "A far-right political system where a country is ruled by a single powerful dictator who demands total loyalty. It puts the needs of the nation or a specific race far above the rights and freedoms of individual people.",
+        quickSummary: "Fascism is a far-right political system ruled by a single powerful dictator who demands total loyalty. It puts the nation's needs above individual rights and freedoms.",
+        coreIdea: "The word 'Fascism' comes from the Italian word fascio, meaning a 'bundle of sticks.' One stick is easy to break, but a bundle tied tightly together is unbreakable. Fascism hates the 'messiness' of democracy and the 'equality' of communism. It believes in strength, discipline, and hierarchy. The government controls the economy, media, and even private speech. It often relies on a 'glorious past' to promise a powerful future, identifying 'enemies' for the people to unite against.",
+        examples: ["State-Run Youth Groups – government trains kids to be soldiers and loyal followers", "Propaganda Everywhere – every movie, newspaper, and radio says the same: 'Our leader is a hero'", "Economic Sync – businesses stay private but the government dictates what to make"],
+        thinkers: [
+          { name: "Benito Mussolini", idea: "'Father' of Fascism in Italy. Wanted to rebuild the Roman Empire. 'Everything in the State, nothing outside the State.'" },
+          { name: "Giovanni Gentile", idea: "Provided intellectual backbone for Mussolini; described Fascism as a 'total' way of life." },
+          { name: "Adolf Hitler", idea: "Led Nazism – a more racist branch of Fascism – using the same structure: one leader, one party, total control." }
+        ],
+        pros: ["Fast Action – without votes or debates, government can build roads, armies incredibly fast", "High National Unity – strong sense of belonging and purpose", "Lower Street Crime – massive police presence and harsh punishments", "Economic Stability (Short-term) – forcing businesses to work together creates apparent stability", "Clear Direction – no confusion about the country's goals"],
+        cons: ["Loss of Human Rights – no freedom of speech, religion, or assembly", "Persecution of Minorities – almost always picks a 'target group' to blame, leading to genocide", "Constant War – Fascism is obsessed with 'strength,' almost always leads to invading other countries", "Total Surveillance – government spies even inside your home", "Destruction of Truth – media becomes a propaganda machine"],
+        realWorldExamples: ["Italy (1922–1943) – under Mussolini, the first truly Fascist state", "Nazi Germany (1933–1945) – most extreme version, combining Fascist control with racial ideology", "Spain (1939–1975) – under Francisco Franco, nationalist dictatorship focused on religion and tradition", "Imperial Japan – total devotion to the Emperor and belief in racial destiny"],
+        books: [
+          { title: "The Anatomy of Fascism", author: "Robert Paxton", note: "Widely considered the best book to explain how Fascism actually works." },
+          { title: "The Doctrine of Fascism", author: "Benito Mussolini", note: "The leader's own explanation of why he thought democracy was weak." },
+          { title: "1984", author: "George Orwell", note: "Fiction novel that perfectly describes life under a totalitarian government." },
+          { title: "It Can't Happen Here", author: "Sinclair Lewis", note: "A chilling story about how a Fascist leader could rise in a democracy like the US." }
+        ]
+      },
+      {
+        name: "Socialism",
+        category: "Political Ideologies",
+        catClass: "political",
+        description: "An economic and political system where the community, rather than private individuals, owns and manages the resources. The main goal is to ensure that wealth and opportunities are shared fairly so that nobody is left behind.",
+        quickSummary: "Socialism is a system where the community owns and manages resources. The main goal is to ensure wealth and opportunities are shared fairly so that nobody is left behind.",
+        coreIdea: "Socialism believes that the 'means of production' (factories, land, banks) should belong to everyone. Instead of a few wealthy CEOs making all the decisions for profit, the government or workers decide how to run things based on what society actually needs. It prioritises cooperation over competition. The idea: if we all contribute to a 'communal pot,' every person can have healthcare, education, and a home.",
+        examples: ["Public Libraries – everyone pays a little in taxes so everyone can read any book for free", "Public Parks – the city owns it so every kid has a place to play", "Universal Healthcare – you don't get a massive bill after surgery because the community has already 'pre-paid' via taxes"],
+        thinkers: [
+          { name: "Karl Marx", idea: "The most famous socialist thinker. 'From each according to his ability, to each according to his needs.'" },
+          { name: "Friedrich Engels", idea: "Marx's partner who helped define how a socialist society would practically function." },
+          { name: "Robert Owen", idea: "Early 'Utopian Socialist' who proved that treating workers well makes them more productive." }
+        ],
+        pros: ["Greater Equality – the gap between ultra-rich and poor is significantly narrowed", "Basic Needs Met – everyone is guaranteed essentials like food, shelter, and medical care", "Reduced Exploitation – workers treated as partners rather than just 'tools' for profit", "Social Stability – when people aren't desperate, crime rates often drop", "Public Interest First – decisions based on what helps environment or public health, not just profit"],
+        cons: ["Slower Innovation – without the promise of becoming a billionaire, some people feel less motivated", "High Taxes – free services require a much larger percentage of people's earnings", "Government Overreach – the state gains a lot of power, which can lead to loss of personal freedom", "Inefficiency – large government bureaucracies can be slow and 'red-taped'", "Lack of Competition – without competition, quality of goods may stagnate"],
+        realWorldExamples: ["The Nordic Model (Denmark, Norway, Sweden) – free markets combined with high taxes for free college and healthcare", "Cuba – historically followed a more strict, state-controlled socialist model", "China – 'Socialism with Chinese characteristics,' blending government control with private business"],
+        books: [
+          { title: "The Communist Manifesto", author: "Karl Marx & Friedrich Engels", note: "The foundational text that started the modern movement." },
+          { title: "Utopia", author: "Thomas More", note: "An early look at what a 'perfect' shared society might look like." },
+          { title: "Why Socialism?", author: "Albert Einstein", note: "The famous scientist explains why he preferred socialism in a short, brilliant essay." }
+        ]
+      },
+
+      // ── SOCIAL ──────────────────────────────────────────────────────────────────────────────
+      {
+        name: "Conservatism",
+        category: "Social Ideologies",
+        catClass: "social",
+        description: "A political and social philosophy that promotes retaining traditional social institutions. Characterised by a 'look before you leap' approach, valuing stability, order, and the wisdom of the past over rapid or radical change.",
+        quickSummary: "Conservatism promotes retaining traditional social institutions with a 'look before you leap' approach, valuing stability and the wisdom of the past over radical change.",
+        coreIdea: "The big idea is that society is a delicate 'living thing' built over hundreds of years – like a massive, old tree. You can't just chop off branches overnight without risking the whole tree dying. Conservatives believe that traditions, religion, and family are the 'glue' that holds people together. They prefer gradual, proven change rather than big revolutionary ideas. They generally support smaller government, lower taxes, and strong national defence.",
+        examples: ["Respecting the Constitution – following the original intent of the founders' laws", "Family Businesses – supporting long-standing local businesses over new government-run social programs", "Preserving Landmarks – saving an old, historic building rather than tearing it down for a glass skyscraper"],
+        thinkers: [
+          { name: "Edmund Burke", idea: "'Father of Modern Conservatism.' Society is a contract between the dead, the living, and those yet to be born." },
+          { name: "Thomas Sowell", idea: "Focuses on the 'constrained vision' – human nature doesn't change, so we need stable laws and markets." },
+          { name: "Margaret Thatcher", idea: "Former UK Prime Minister who combined traditional values with 'Free Market' economics." }
+        ],
+        pros: ["Social Stability – conservative societies often feel very secure and predictable", "Economic Freedom – encourages hard work and keeping the money you earn", "Strong Community – high value on local charities, churches, and families as safety nets", "Protecting Identity – preserves a nation's unique culture, history, and language", "Fiscal Responsibility – emphasises 'living within your means' and avoiding massive debt"],
+        cons: ["Resistance to Progress – desire to keep things the same can hold back necessary changes like civil rights", "Inequality – favoring the status quo can make it harder for people at the bottom to move up", "Rigidness – strict adherence to old traditions can make a society feel 'stuck in the past'", "Social Pressure – pressure to 'fit in' with traditional norms can be difficult for people who are different", "Slower Innovation – might be slower to adopt new technologies or social structures"],
+        realWorldExamples: ["United Kingdom – The Conservative Party (Tories) focuses on the Monarchy and Free Market", "United States – The Republican Party stands for 'Constitutional Conservatism': gun rights, lower taxes, traditional family values", "Japan – The Liberal Democratic Party (actually conservative) has ruled for most of the last 70 years", "Poland & Hungary – rise of 'National Conservatism' with heavy emphasis on religious traditions"],
+        books: [
+          { title: "Reflections on the Revolution in France", author: "Edmund Burke", note: "The book that started it all, warning about the dangers of radical change." },
+          { title: "The Conservative Mind", author: "Russell Kirk", note: "A brilliant look at the history of conservative thought in America and Britain." },
+          { title: "The Road to Serfdom", author: "Friedrich Hayek", note: "A warning about how too much government planning leads to loss of individual freedom." }
+        ]
+      },
+      {
+        name: "Feminism",
+        category: "Social Ideologies",
+        catClass: "social",
+        description: "The belief that men and women should have equal rights and opportunities. A movement that aims to end sexism, exploitation, and oppression so that a person's gender doesn't limit what they can achieve in life.",
+        quickSummary: "Feminism is the belief that men and women should have equal rights and opportunities, aiming to end sexism and oppression so that gender doesn't limit what anyone can achieve.",
+        coreIdea: "At its simplest, feminism is about fairness. For a long time, societies were built as 'Patriarchies' – men held most power in government, business, and even at home. Feminism argues this is not only unfair to women but also harmful to society as a whole. It isn't about women being 'better' than men or 'hating' men. It's about breaking down 'gender roles' that trap everyone. Your talent and hard work should matter more than whether you were born male or female.",
+        examples: ["Equal Pay – male and female doctors doing the same job should receive the same salary", "Education – feminism works to ensure every girl can be an engineer, pilot, or scientist if she chooses", "Voting Rights – Suffragettes fought for decades so women could have a voice in politics"],
+        thinkers: [
+          { name: "Mary Wollstonecraft", idea: "One of the earliest thinkers. Women only seemed inferior because they weren't allowed to go to school (1700s)." },
+          { name: "Sojourner Truth", idea: "Former slave and activist who reminded the world that feminism must include all women regardless of race. 'Ain't I a woman?'" },
+          { name: "Simone de Beauvoir", idea: "'One is not born, but rather becomes, a woman.' Society 'teaches' us how to act like a certain gender." },
+          { name: "Bell Hooks", idea: "Focused on 'Intersectionality' – a woman's experience is shaped by gender, race, and social class." }
+        ],
+        pros: ["Economic Growth – when women can work and start businesses, the entire country's economy grows faster", "Greater Freedom – people free to pursue true passions instead of 'pink' or 'blue' jobs", "Social Justice – reduces violence against women and ensures legal protection", "Better Education – statistics show when women are educated, children are healthier and better educated too", "Improved Relationships – encourages men and women to be 'partners' rather than 'masters and servants'"],
+        cons: ["Cultural Tension – in very traditional societies, feminism can cause conflict with long-standing customs", "The Double Burden – as women start working, they may still be expected to do 100% of housework", "Misunderstandings – some mistakenly believe feminism is about 'attacking men,' causing social division", "Workplace Competition – some critics argue doubling the workforce makes high-paying jobs harder to find", "Radical Views – extreme versions can alienate people who want equality but still value traditional family structures"],
+        realWorldExamples: ["The Right to Vote – almost every country now allows women to vote, a direct result of feminism", "Iceland – first country to make it illegal to pay men more than women for the same work", "The #MeToo Movement – encouraged women to speak up against workplace harassment globally", "UAE and Rwanda – both made massive efforts to ensure women hold high percentages of parliamentary seats"],
+        books: [
+          { title: "A Vindication of the Rights of Woman", author: "Mary Wollstonecraft", note: "The 1792 classic that started the conversation." },
+          { title: "The Second Sex", author: "Simone de Beauvoir", note: "A deep dive into why women have historically been treated as 'second-class' citizens." },
+          { title: "We Should All Be Feminists", author: "Chimamanda Ngozi Adichie", note: "Short, simple, modern book explaining why feminism is good for men too." },
+          { title: "The Beauty Myth", author: "Naomi Wolf", note: "Explains how media uses 'beauty standards' to keep women feeling insecure and distracted." }
+        ]
+      },
+      {
+        name: "Humanism",
+        category: "Social Ideologies",
+        catClass: "social",
+        description: "A progressive philosophy of life that affirms our ability and responsibility to lead ethical lives of personal fulfillment, emphasising that human reason, ethics, and social justice are the best tools for building a better world.",
+        quickSummary: "Humanism is a progressive philosophy affirming that human reason, ethics, and social justice — not supernatural intervention — are the best tools for building a better world.",
+        coreIdea: "The big idea behind Humanism is that human beings are enough. We don't need a higher power to tell us what is right or wrong; we can figure it out ourselves through logic, empathy, and science. Humanists believe that because this is likely the only life we have, we should make it as meaningful and happy as possible for everyone. It's about being 'good without a god' (though some religious people also hold humanist values). Instead of looking at the sky for answers, Humanism looks at the person standing next to you.",
+        examples: ["Scientific Research – a humanist approach focuses on medicine and technology to find a cure, not just prayer", "Human Rights – the idea that every person has rights simply because they are human is deeply humanist", "Volunteering – helping a neighbour because of empathy, not to earn a reward in an afterlife"],
+        thinkers: [
+          { name: "Erasmus", idea: "Renaissance scholar who believed education and reason were keys to a better society." },
+          { name: "Voltaire", idea: "Fierce defender of civil liberties and the separation of church and state." },
+          { name: "Carl Sagan", idea: "Promoted the idea that we are 'star stuff' and have a duty to preserve our planet through science." }
+        ],
+        pros: ["Promotes Science – places huge value on evidence and facts, leading to technological and medical breakthroughs", "Universal Equality – sees everyone as part of the 'human family' regardless of religion, race, or gender", "Personal Freedom – you are the author of your own life story", "Tolerance – generally very accepting of different lifestyles and beliefs", "Focus on the Now – encourages solving problems today rather than waiting for a future paradise"],
+        cons: ["Lack of 'Absolute' Moral Ground – if humans make the rules, those rules can change, leading to moral confusion", "No Spiritual Comfort – the idea of no afterlife or higher plan can feel lonely or scary", "Over-reliance on Reason – some feel it ignores the 'mystical' or emotional side of human experience", "Human-Centric Bias – critics argue it puts humans too much at the center, potentially ignoring rights of animals or the planet", "No Central Authority – without a holy book or leader, it can be hard to agree on how to solve complex political issues"],
+        realWorldExamples: ["The United Nations – the Universal Declaration of Human Rights is a purely humanist document", "Secular Governments – France and the Netherlands operate on humanist principles where laws are based on logic", "Doctors Without Borders – helps people based purely on their human need for medical care", "Modern Education – schools that teach 'Critical Thinking' use a humanist method"],
+        books: [
+          { title: "Humanism: A Very Short Introduction", author: "Stephen Law", note: "A perfect, easy-to-read starting point for the basics." },
+          { title: "The Age of Reason", author: "Thomas Paine", note: "Classic book arguing against organised religion and for the use of logic." },
+          { title: "Enlightenment Now", author: "Steven Pinker", note: "How reason, science, and humanism are actually making the world a better place." },
+          { title: "The Good Book", author: "A.C. Grayling", note: "A non-religious 'bible' gathering wisdom from thousands of years of human philosophy." }
+        ]
+      },
+      {
+        name: "Multiculturalism",
+        category: "Social Ideologies",
+        catClass: "social",
+        description: "The idea that a society is enriched by having many different cultures, religions, and languages living together side-by-side. Instead of everyone 'blending' into one single culture, each group keeps its unique traditions while being treated with equal respect.",
+        quickSummary: "Multiculturalism holds that society is enriched by diverse cultures, religions, and languages living together, with each group keeping its unique traditions while being treated with equal respect.",
+        coreIdea: "Think of a society not as a 'Melting Pot' (where everything melts into one soup) but as a 'Salad Bowl.' In a salad, the tomatoes, lettuce, and cucumbers are all in the same bowl, but they keep their own shape and flavour. Together, they make the salad better. Multiculturalism believes that 'difference' is a strength. The government should not just tolerate different cultures, but actively protect their rights. The core goal is inclusion: ensuring that no matter your background, you feel like a full member of the country.",
+        examples: ["Food Festivals – Indian curry, Italian pasta, and Mexican tacos all on the same street", "Multilingual Signs – airports with signs in English, Spanish, Arabic, and Chinese", "Public Holidays – offices that give days off for Christmas, Eid, Diwali, and Hanukkah"],
+        thinkers: [
+          { name: "Will Kymlicka", idea: "Argued that 'Minority Rights' are essential – government must sometimes give special protections to smaller cultural groups." },
+          { name: "Charles Taylor", idea: "'Politics of Recognition' – if society ignores our culture, it hurts our self-worth and identity." },
+          { name: "Bhikhu Parekh", idea: "No single culture has the 'whole truth' about how to live. By mixing cultures, we all learn more." }
+        ],
+        pros: ["Cultural Richness – society becomes more vibrant with diverse music, art, literature, and food", "Global Connection – a multicultural country can easily trade and communicate with the rest of the world", "Innovation – people with different perspectives come up with more creative solutions", "Tolerance – growing up around 'different' people makes citizens more open-minded", "Fairness – ensures minority groups don't feel forced to 'hide' who they are"],
+        cons: ["Social Division – people staying in cultural 'bubbles' may cause the country to lose national unity", "Conflict of Values – cultural traditions might clash with the country's laws", "Language Barriers – too many languages can make government communication difficult", "Fragmented Identity – some feel it makes it harder to define what a country 'stands for'", "Risk of Ghettoisation – different groups may end up living separately with very little interaction"],
+        realWorldExamples: ["Canada – first country in the world to adopt an official Multiculturalism Policy (1971)", "Australia – 'Multicultural Access and Equity' policy ensuring government services for all backgrounds", "London (UK) – over 300 languages spoken, yet everyone identifies as a 'Londoner'", "Singapore – carefully balances Chinese, Malay, Indian, and Eurasian populations through strict laws"],
+        books: [
+          { title: "Multiculturalism: A Very Short Introduction", author: "Ali Rattansi", note: "A clear guide to the history and heated debates surrounding this topic." },
+          { title: "Liberalism, Community, and Culture", author: "Will Kymlicka", note: "A deeper look at how individual freedom and cultural groups can work together." },
+          { title: "The Lies That Bind", author: "Kwame Anthony Appiah", note: "A fascinating book about how our identities are often more complicated than we think." }
+        ]
+      },
+
+      // ── PHILOSOPHICAL ──────────────────────────────────────────────────────────────────────
+      {
+        name: "Existentialism",
+        category: "Philosophical Ideologies",
+        catClass: "philosophical",
+        description: "A philosophy that says you are the creator of your own meaning. It argues that the universe has no pre-written script or purpose, so it is up to each individual to decide who they are and what their life is for.",
+        quickSummary: "Existentialism says you are the creator of your own meaning. The universe has no pre-written script or purpose, so it is up to each individual to decide who they are and what their life is for.",
+        coreIdea: "Most philosophies try to find the 'meaning of life' in religion, science, or nature. Existentialism says, 'Wait, there is no built-in meaning!' This might sound scary, but existentialists see it as the ultimate freedom. Think of it like being handed a blank piece of paper. You aren't born as a 'hero,' a 'failure,' or a 'worker.' You are just a human being who exists first, and then you choose your identity through your actions. This is called 'Existence precedes Essence.'",
+        examples: ["Career Choice – an existentialist chooses a job that feels authentic to them, even if unusual", "Facing a Crisis – instead of asking 'Why me?', an existentialist asks 'How am I going to respond to this?'", "DIY Meaning – if you find joy in painting rocks, then painting rocks is the meaning of your life in that moment"],
+        thinkers: [
+          { name: "Jean-Paul Sartre", idea: "The most famous existentialist. Humans are 'condemned to be free' – freedom is a heavy burden because we have no one else to blame." },
+          { name: "Albert Camus", idea: "Focused on the 'Absurd' – conflict between humans looking for meaning and a silent, cold universe. 'The struggle itself toward the heights is enough to fill a man's heart.'" },
+          { name: "Søren Kierkegaard", idea: "A religious existentialist who believed that because life is uncertain, we must take a 'Leap of Faith' to find our own path." },
+          { name: "Friedrich Nietzsche", idea: "Famously claimed 'God is dead,' meaning society had to become 'Overmen' (Übermensch) and create their own values." }
+        ],
+        pros: ["Total Empowerment – you are the boss of your own life; not a victim of 'fate'", "Authenticity – encourages you to stop following the crowd and start living true to yourself", "Resilience – since you accept the world is chaotic, you handle surprises better", "No Judgement – no 'right' or 'wrong' way to live a meaningful life", "Focus on Action – values what you do over what you wish or dream"],
+        cons: ["Existential Anxiety – realising you are 100% responsible for your life can lead to 'Angst' (feeling overwhelmed)", "Moral Confusion – if everyone makes their own rules, critics worry people might do whatever they want", "Loneliness – the idea we are all 'individuals' creating our own worlds can make people feel isolated", "Lack of Direction – without a 'map' from religion or tradition, some feel lost", "Overly Dark – often criticised for focusing too much on death, dread, and 'pointlessness' of the universe"],
+        realWorldExamples: ["The Mid-Life Crisis – often just an existential moment where someone realises they've been living a 'script'", "Modern Art & Literature – books like The Stranger or movies like Fight Club explore finding meaning in a chaotic world", "Humanistic Psychology – therapists use existential ideas to help patients take responsibility for their happiness", "The Digital Nomad Lifestyle – people leaving 9-5 jobs to travel the world, creating a life that doesn't follow traditional rules"],
+        books: [
+          { title: "Existentialism is a Humanism", author: "Jean-Paul Sartre", note: "A short, powerful transcript of a lecture explaining his ideas simply." },
+          { title: "The Myth of Sisyphus", author: "Albert Camus", note: "Famous essay on how to find happiness even when life feels 'absurd.'" },
+          { title: "Man's Search for Meaning", author: "Viktor Frankl", note: "Written by a psychiatrist who survived a concentration camp; finding meaning is the key to human survival." },
+          { title: "At the Existentialist Café", author: "Sarah Bakewell", note: "A fun, modern book about philosophers in cafes who changed how we think." }
+        ]
+      },
+      {
+        name: "Nihilism",
+        category: "Philosophical Ideologies",
+        catClass: "philosophical",
+        description: "The belief that life has no intrinsic meaning or value. It argues that the universe is vast, cold, and indifferent, and that human existence is just a tiny, accidental speck in time with no grand 'purpose' or divine plan.",
+        quickSummary: "Nihilism is the belief that life has no intrinsic meaning or value. The universe is vast, cold, and indifferent — human existence is a tiny, accidental speck with no grand purpose.",
+        coreIdea: "The word 'Nihilism' comes from the Latin word nihil, which means 'nothing.' While most people try to find meaning in religion, success, or family, a nihilist says, 'In a billion years, the sun will explode and none of this will have mattered.' However, there are two ways to look at this 'nothingness': Pessimistic Nihilism ('Nothing matters, so life is sad and pointless') versus Optimistic Nihilism ('Nothing matters, so I am free! I can eat a donut, fall in love, and enjoy the sunshine without the pressure of a destiny.').",
+        examples: ["The 'Reset' Button – realising your embarrassing moment in 3rd grade doesn't matter to the universe", "Space Exploration – looking at the 'Pale Blue Dot' photo of Earth from space", "Video Games – realising the NPCs don't have 'real' souls is a simulation of a nihilistic world"],
+        thinkers: [
+          { name: "Friedrich Nietzsche", idea: "Didn't want people to be nihilists, but warned that as religion lost power, society would fall into 'The Abyss' of nihilism." },
+          { name: "Ivan Turgenev", idea: "Russian author who popularised the term in his novel Fathers and Sons." },
+          { name: "The Big Bang & Heat Death", idea: "Modern science contributes to nihilistic thought by showing the universe started by accident and will eventually end in total coldness." }
+        ],
+        pros: ["Freedom from Pressure – if there is no 'right' way to live, you can't 'fail' at life", "Honesty – faces the harsh reality of the universe without 'fairy tales'", "Stress Reduction – small problems seem much smaller compared to the infinite timeline of the universe", "Radical Equality – in a universe where nothing matters, a King and a beggar are exactly the same", "Focus on the Present – since there is no 'heaven' or 'future purpose,' you are forced to enjoy the 'now'"],
+        cons: ["Risk of Depression – the feeling that 'nothing matters' can lead to lack of motivation or deep sadness", "Moral Vacuum – if nothing matters, some might argue that hurting others doesn't matter either", "Apathy – can make people stop caring about important things like climate change or social justice", "Loneliness – hard to connect with others searching for deep 'cosmic' meaning", "Lack of Structure – without a 'why,' many find it difficult to get out of bed or work hard"],
+        realWorldExamples: ["Rick and Morty – Rick is a classic 'Optimistic Nihilist'; the universe is meaningless so he just goes on crazy adventures", "Goth & Grunge Culture – many subcultures use nihilistic themes in music and fashion to reject society's 'fake' rules", "The 'Whatever' Attitude – modern slang 'It is what it is' carries a tiny bit of nihilistic acceptance", "Scientific Materialism – the belief that we are just 'biological machines' made of atoms with no soul"],
+        books: [
+          { title: "Fathers and Sons", author: "Ivan Turgenev", note: "The classic story that introduced the world to the idea of a nihilist character." },
+          { title: "The Will to Power", author: "Friedrich Nietzsche", note: "A deep look at how to survive the 'death of God' and the rise of nihilism." },
+          { title: "The Conspiracy Against the Human Race", author: "Thomas Ligotti", note: "A very dark, modern look at why human consciousness might be a 'tragic mistake.'" },
+          { title: "Nothing", author: "Janne Teller", note: "A powerful young-adult novel about a boy who stays in a tree because 'nothing matters.'" }
+        ]
+      },
+      {
+        name: "Rationalism",
+        category: "Philosophical Ideologies",
+        catClass: "philosophical",
+        description: "The belief that reason and logic are the primary sources of knowledge. It argues that we don't need to see or touch everything to know it's true; our minds are powerful enough to discover universal truths through pure thinking.",
+        quickSummary: "Rationalism is the belief that reason and logic are the primary sources of knowledge. Our minds are powerful enough to discover universal truths through pure thinking alone.",
+        coreIdea: "Rationalists believe that the human mind is born with certain 'innate ideas' or a built-in ability to understand the world. While 'Empiricism' says we only learn through our five senses, Rationalism says our senses can be fooled. Think of Mathematics – you don't need to count every single apple in the world to know that 2+2=4. Rationalism applies this 'Math-like' logic to everything – from ethics to the existence of the universe. It treats the mind like a high-speed processor that can solve problems by using the right 'code' (logic).",
+        examples: ["Solving a Riddle – you don't need to physically go anywhere to solve a logic puzzle", "Planning a House – an architect uses geometry and physics to know the building will stand before a single brick is laid", "Moral Rules – deciding that 'stealing is wrong' because it is logically inconsistent with a peaceful society"],
+        thinkers: [
+          { name: "René Descartes", idea: "'Father of modern philosophy.' Doubted everything until he realised he couldn't doubt his own thinking. 'I think, therefore I am.'" },
+          { name: "Baruch Spinoza", idea: "Argued that the entire universe follows a logical structure like a giant geometric proof." },
+          { name: "Gottfried Wilhelm Leibniz", idea: "A genius who co-invented Calculus. Believed the world is built on 'Monads' (logical building blocks)." }
+        ],
+        pros: ["Certainty – unlike our eyes (which can see a mirage), logic and math provide 'absolute' truths that don't change", "Universal Application – logic works the same way for a person in Japan as it does for a person in Brazil", "Advanced Innovation – allows us to predict things we can't see yet, like black holes, using only equations", "Efficiency – solve complex problems mentally without wasting time on 'trial and error'", "Intellectual Independence – teaches you to trust your own brain and critical thinking"],
+        cons: ["Disconnected from Reality – a 'perfect' logical idea may actually fail in the messy physical world", "Ignores Emotion – treats humans like computers, often ignoring that feelings and intuition are part of being alive", "Limited Scope – some things like the taste of a strawberry or the feeling of love cannot be understood through 'pure logic'", "Overconfidence – rationalists can be so sure of their 'logical' conclusion that they ignore physical evidence proving them wrong", "Elite Barrier – can feel cold or academic, making people feel that 'truth' is only available to those with advanced logic training"],
+        realWorldExamples: ["Computer Programming – coding is pure Rationalism; if the logic is correct, the program works", "Legal Systems – judges use 'statutory interpretation,' applying the logic of the law to a specific case", "Scientific Theories – Einstein used math (Rationalism) to 'prove' that gravity bends light before we had the telescopes to see it", "Artificial Intelligence – AI systems rely heavily on logic and data patterns"],
+        books: [
+          { title: "Meditations on First Philosophy", author: "René Descartes", note: "The classic book where he tries to rebuild all human knowledge from scratch." },
+          { title: "Ethics", author: "Baruch Spinoza", note: "A book written exactly like a geometry textbook, proving how we should live using logical 'theorems.'" },
+          { title: "Critique of Pure Reason", author: "Immanuel Kant", note: "A famous book that tries to find a middle ground between logic and experience." },
+          { title: "The Problems of Philosophy", author: "Bertrand Russell", note: "A very clear, modern introduction to how we know what we know." }
+        ]
+      },
+      {
+        name: "Stoicism",
+        category: "Philosophical Ideologies",
+        catClass: "philosophical",
+        description: "An ancient Greek philosophy that teaches how to keep a calm, rational mind no matter what happens. Built on the idea that while you cannot control the world around you, you have total control over how you react to it.",
+        quickSummary: "Stoicism is an ancient Greek philosophy that teaches you to keep a calm, rational mind no matter what happens — you cannot control the world, but you have total control over how you react to it.",
+        coreIdea: "The 'Golden Rule' of Stoicism is the Dichotomy of Control. Stoics divide the entire universe into two piles: Things you control (your thoughts, actions, intentions, and character) and Things you don't control (the weather, traffic, what other people say about you, and the past). All human suffering comes from trying to control the second pile. Stoicism isn't about hiding emotions; it's about using logic to make sure your emotions don't control you.",
+        examples: ["The Rainy Day – a stoic says, 'I cannot stop the rain, but I can choose to enjoy a book indoors instead'", "The Rude Boss – a stoic realises the yelling is the boss's problem; the stoic focuses only on improving their own work", "Sports – an athlete misses a shot and immediately focuses on the next move, not the mistake"],
+        thinkers: [
+          { name: "Marcus Aurelius", idea: "Emperor of Rome who wrote a private diary (Meditations) to remind himself to stay humble and fair." },
+          { name: "Epictetus", idea: "Born a slave. Taught that even if your body is in chains, your mind can remain free. 'It's not what happens to you, but how you react to it that matters.'" },
+          { name: "Seneca", idea: "Wealthy advisor and playwright. Wrote about handling 'The Shortness of Life' and not wasting time on trivial worries." }
+        ],
+        pros: ["Emotional Strength – you become much harder to 'trigger' or upset", "Reduced Stress – by letting go of things you can't control, a huge weight is lifted off your shoulders", "Better Productivity – you stop complaining and start doing; focus only on tasks you can actually influence", "Clear Thinking – helps you make decisions based on facts and logic rather than fear or anger", "Resilience – prepares you for the 'worst-case scenario' so if life gets hard, you are already mentally ready"],
+        cons: ["The 'Cold' Reputation – people might mistake your calm for being 'robotic' or 'emotionless'", "Risk of Inaction – critics argue that if you 'accept' everything you can't control, you might stop trying to change unfair systems", "Over-Internalization – puts a lot of pressure on the individual to 'be perfect' in their thoughts, which can be exhausting", "Hard to Master – takes years of daily practice to truly stop getting angry at small things", "Neglect of Support – because stoicism values self-reliance, some people might refuse to ask for help when they actually need it"],
+        realWorldExamples: ["Cognitive Behavioural Therapy (CBT) – this popular modern therapy is directly based on Stoic ideas", "Elite Athletes – many pro athletes in the NFL and NBA use stoicism to stay focused after making a mistake", "Military Training – soldiers use stoic techniques to stay calm in dangerous, chaotic situations", "Silicon Valley – tech leaders use stoicism to handle the 'ups and downs' of starting a business without burning out"],
+        books: [
+          { title: "Meditations", author: "Marcus Aurelius", note: "The most famous 'self-help' book in history, originally written as a private journal." },
+          { title: "Letters from a Stoic", author: "Seneca", note: "Beautifully written advice on friendship, wealth, and facing death." },
+          { title: "The Daily Stoic", author: "Ryan Holiday", note: "A modern bestseller giving one tiny piece of stoic wisdom for every day of the year." },
+          { title: "The Enchiridion", author: "Epictetus", note: "A short, 'punchy' manual on how to live a free and happy life." }
+        ]
+      },
+
+      // ── CULTURAL ──────────────────────────────────────────────────────────────────────────
+      {
+        name: "Globalism",
+        category: "Cultural Ideologies",
+        catClass: "cultural",
+        description: "The belief that the world is becoming one giant, interconnected system. It argues that instead of acting alone, countries should work together on trade, politics, and the environment because our problems no longer stop at national borders.",
+        quickSummary: "Globalism is the belief that the world is becoming one giant, interconnected system. Countries should work together on trade, politics, and the environment because our problems no longer stop at national borders.",
+        coreIdea: "The core idea of Globalism is Interdependence. A phone designed in the US uses chips from Taiwan, minerals from Africa, and is assembled in China. If one part of that chain breaks, the whole world feels it. Globalists believe that 'Humanity' is more important than 'Nationality.' They support organisations like the UN or WTO to create global rules. The goal is to make the world a 'Global Village' where ideas, money, and people can move freely.",
+        examples: ["The Internet – talking to someone in Brazil, watching a video from Japan, buying from Germany all in five minutes", "Climate Change – pollution travels across the whole world, so no single country can 'fix' the environment alone", "International Brands – finding a Starbucks or McDonald's in almost every major city in the world"],
+        thinkers: [
+          { name: "Immanuel Kant", idea: "Dreamed of a 'Perpetual Peace' where all countries would join a global federation to stop fighting." },
+          { name: "David Ricardo", idea: "Proved that if countries 'specialise' in what they are good at and trade with each other (Free Trade), everyone gets richer." },
+          { name: "Cosmopolitanism", idea: "The idea that all human beings belong to a single community based on a shared morality." }
+        ],
+        pros: ["Economic Wealth – global trade makes products cheaper and has lifted millions out of poverty", "Peace – countries that trade heavily with each other are much less likely to go to war", "Scientific Progress – scientists from all over the world can share data instantly to solve pandemics", "Cultural Diversity – we get to enjoy music, food, and movies from every corner of the globe", "Global Standards – helps spread human rights and labour laws to places that might otherwise ignore them"],
+        cons: ["Loss of Jobs – many factories in wealthy countries close and move to poorer countries where labour is cheaper (Outsourcing)", "Loss of Culture – critics worry the world is becoming 'Americanised,' causing local traditions to disappear", "Lack of Control – 'faceless' global organisations make rules for local towns without people's permission", "Environmental Cost – shipping products halfway across the world creates massive amounts of pollution", "Inequality – while globalism makes the world richer, big corporations often gain much more power than ordinary citizens"],
+        realWorldExamples: ["The European Union (EU) – 27 countries sharing a single currency (the Euro) and free movement", "The World Health Organization (WHO) – tracked COVID-19 and coordinated a worldwide response", "Supply Chains – a single Boeing airplane has over 6 million parts coming from dozens of different countries", "The Olympics and FIFA World Cup – the whole world follows the same rules and celebrates a shared human experience"],
+        books: [
+          { title: "The World Is Flat", author: "Thomas L. Friedman", note: "Famous book explaining how technology has levelled the playing field for global competition." },
+          { title: "The Lexus and the Olive Tree", author: "Thomas L. Friedman", note: "Explores tension between modern global trade and local identity and tradition." },
+          { title: "Globalization and Its Discontents", author: "Joseph Stiglitz", note: "A Nobel Prize-winning economist explains why globalism sometimes fails poor countries." }
+        ]
+      },
+      {
+        name: "Nationalism",
+        category: "Cultural Ideologies",
+        catClass: "cultural",
+        description: "The belief that a specific group of people — sharing a common language, history, or culture — should have their own independent nation. It is the feeling of intense pride and loyalty toward one's own country, putting its interests above others.",
+        quickSummary: "Nationalism is the belief that a specific group of people — sharing common language, history, or culture — should have their own independent nation, with intense pride and loyalty toward that nation.",
+        coreIdea: "The core idea is that the world is naturally divided into 'nations,' and each nation has the right to rule itself. Think of it like a giant family. Just as you feel a special bond with siblings and parents that you don't feel with strangers, nationalists feel a deep 'familial' bond with millions of people they've never met, simply because they share the same flag and heritage. It turns a piece of land into a 'Homeland' and creates a sense of identity.",
+        examples: ["The Olympics – cheering for an athlete you don't know personally, just because they wear your country's colors", "National Anthems – standing up and feeling emotional when a specific song plays before a cricket or football match", "Independence Days – celebrating the day a country broke away from a foreign empire to rule itself"],
+        thinkers: [
+          { name: "Giuseppe Mazzini", idea: "Italian revolutionary who believed every 'people' deserved a nation. Saw nationalism as a way to bring brotherhood to Europe." },
+          { name: "Johann Gottfried von Herder", idea: "German thinker who argued that every nation has a unique 'soul' (Volksgeist) found in its language and folk songs." },
+          { name: "Nation-State", idea: "The idea that borders of a government should match the borders of a cultural group." }
+        ],
+        pros: ["Unity – brings millions of different people together under one identity", "Sacrifice – inspires people to do brave things for the 'greater good,' like serving in the military", "Self-Rule – allows people to be governed by their own culture and values", "Preservation – keeps unique languages, traditions, and histories alive in a globalised world", "Social Cooperation – people are often more willing to pay taxes for healthcare or schools if they feel they are helping 'their own people'"],
+        cons: ["Exclusion – by defining who is 'in' the nation, it often makes minorities or immigrants feel like 'outsiders'", "Conflict – blind nationalism can lead to supporting harmful decisions just because they are made by one's own country", "Superiority – sometimes turns into 'Jingoism' – the belief that your nation is better than everyone else's", "Blind Loyalty – can make people ignore the mistakes of their own government", "Economic Barriers – extreme nationalism can lead to 'Protectionism,' making goods more expensive for everyone"],
+        realWorldExamples: ["The Unification of Italy and Germany – in the 1800s, dozens of small states joined because of shared national identity", "Anti-Colonial Movements – India, Vietnam, and African nations used nationalism to kick out European empires", "Brexit – UK's decision to leave the European Union driven by desire for 'National Sovereignty'", "Zionism – the nationalist movement that led to the creation of the State of Israel"],
+        books: [
+          { title: "Imagined Communities", author: "Benedict Anderson", note: "Famous book explaining how we 'imagine' we are connected to millions of strangers through media and language." },
+          { title: "Nations and Nationalism", author: "Ernest Gellner", note: "Explains how the Industrial Revolution made nationalism necessary for modern society." },
+          { title: "The Virtue of Nationalism", author: "Yoram Hazony", note: "A modern argument for why independent nations are better for freedom than global empires." }
+        ]
+      },
+      {
+        name: "Traditionalism",
+        category: "Cultural Ideologies",
+        catClass: "cultural",
+        description: "The belief that the wisdom of the past is the best guide for the present. It argues that long-standing customs, religions, and social structures have survived for centuries for a reason and should be preserved against the 'chaos' of modern change.",
+        quickSummary: "Traditionalism is the belief that the wisdom of the past is the best guide for the present. Long-standing customs and social structures have survived centuries for a reason and should be preserved.",
+        coreIdea: "Traditionalism is like a 'safety brake' on the fast-moving car of progress. While modern society often asks, 'How can we make things new?', Traditionalism asks, 'Why did our ancestors do it this way?' It believes that humans aren't just individuals, but links in a long chain connecting the past to the future. By following traditions — specific ways of dressing, eating, praying, or organising a family — we stay connected to a deeper 'Truth' that doesn't change.",
+        examples: ["Family Traditions – having a specific meal or ceremony every Sunday exactly the way your great-grandparents did", "Architecture – building a new house using old, local materials and styles (like a thatched roof) instead of a modern glass box", "Handmade Goods – choosing a hand-carved wooden table over a factory-made plastic one because it has 'soul' and history"],
+        thinkers: [
+          { name: "René Guénon", idea: "French thinker who argued that modern society has lost its 'spiritual center' and we must return to ancient, universal truths found in religion." },
+          { name: "Julius Evola", idea: "Controversial figure who believed society should be organised like a 'Kingdom' with clear ranks and spiritual discipline (his ideas are widely debated and criticised)." },
+          { name: "Frithjof Schuon", idea: "Focused on the 'Perennial Philosophy' – the idea that all great religions share the same traditional core." }
+        ],
+        pros: ["Strong Identity – gives people a very deep sense of who they are and where they belong", "Social Stability – because everyone knows their role and follows the same customs, there is often less loneliness and confusion", "High Quality – values things that last (stone buildings, handmade tools) over 'disposable' modern products", "Mental Peace – following a proven path can reduce the 'stress of choice' many feel in the modern world", "Environmental Harmony – many traditional ways of living are much more in tune with nature and the seasons"],
+        cons: ["Restricted Freedom – can feel very suffocating for people who want to live differently", "Inequality – traditional systems often rely on strict hierarchies where some (based on birth or gender) have more power", "Resistance to Science – may reject new medical or technological breakthroughs because they 'interfere' with the old way", "Exclusion – can be very unwelcoming to outsiders or new ideas, leading to a 'closed' society", "Slower Development – countries that follow strict traditionalism may fall behind in the global economy"],
+        realWorldExamples: ["The Amish – communities in the US that choose to live without modern technology to preserve their 18th-century way of life", "Monarchies – countries like the UK, Japan, or Saudi Arabia keep Kings and Emperors to represent 'living history'", "Indigenous Cultures – tribal groups in the Amazon or Africa fighting to keep ancient languages and land-management techniques", "Traditionalist Catholicism – groups within the Church that insist on performing the Mass in Latin, the way it was done for 1,500 years"],
+        books: [
+          { title: "The Crisis of the Modern World", author: "René Guénon", note: "A classic book explaining why the author thinks modern society is failing and needs tradition." },
+          { title: "Revolt Against the Modern World", author: "Julius Evola", note: "A very intense look at how 'Heroic' traditional societies used to work." },
+          { title: "The Unsettling of America", author: "Wendell Berry", note: "A modern book about why traditional farming and local communities are better for our souls." }
+        ]
+      }
+    ];
+
+    // ========================== CATEGORIES META ==========================
+    const categoriesMeta = [
+      { name: "Political Ideologies", icon: "fas fa-landmark", cls: "political" },
+      { name: "Social Ideologies",    icon: "fas fa-users",    cls: "social" },
+      { name: "Philosophical Ideologies", icon: "fas fa-brain", cls: "philosophical" },
+      { name: "Cultural Ideologies",  icon: "fas fa-globe",   cls: "cultural" }
+    ];
+
+    function getIdeologiesByCategory(catName) {
+      return ideologiesDB.filter(ideo => ideo.category === catName);
+    }
+
+    // ========================== RENDER CATEGORIES ==========================
+    function renderCategories() {
+      const grid = document.getElementById("categoriesGrid");
+      grid.innerHTML = "";
+      categoriesMeta.forEach(cat => {
+        const count = getIdeologiesByCategory(cat.name).length;
+        const card = document.createElement("div");
+        card.classList.add("category-card", cat.cls);
+        card.innerHTML = `
+          <span class="category-icon"><i class="${cat.icon}"></i></span>
+          <h3>${cat.name}</h3>
+          <p>${count} ideologies inside</p>
+          <span class="category-pill">${cat.name.split(' ')[0]}</span>
+        `;
+        card.addEventListener("click", (e) => { e.stopPropagation(); showCategoryFolder(cat.name); });
+        grid.appendChild(card);
+      });
+    }
+
+    // ========================== FOLDER VIEW ==========================
+    function showCategoryFolder(categoryName) {
+      document.getElementById("ideologyDetailContainer").style.display = "none";
+      const folderContainer = document.getElementById("categoryIdeologiesContainer");
+      const ideologiesList = getIdeologiesByCategory(categoryName);
+      document.getElementById("categoryTitle").innerHTML = `<i class="fas fa-folder-open"></i> ${categoryName} <span style="color:var(--text-secondary);font-size:0.9rem;">(${ideologiesList.length} entries)</span>`;
+      const listContainer = document.getElementById("ideologiesInCategoryList");
+      listContainer.innerHTML = "";
+      ideologiesList.forEach(ideo => {
+        const tag = document.createElement("div");
+        tag.classList.add("ideology-tag");
+        tag.innerHTML = `<i class="fas fa-book-open"></i> ${ideo.name}`;
+        tag.addEventListener("click", (e) => { e.stopPropagation(); renderIdeologyPage(ideo); });
+        listContainer.appendChild(tag);
+      });
+      folderContainer.style.display = "block";
+      folderContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // ========================== IDEOLOGY DETAIL PAGE ==========================
+    function getCatColor(catClass) {
+      const map = { political: 'var(--accent-red)', social: 'var(--accent-blue)', philosophical: 'var(--accent-green)', cultural: 'var(--accent-gold)' };
+      return map[catClass] || 'var(--accent-blue)';
+    }
+
+    function renderIdeologyPage(ideology) {
+      document.getElementById("categoryIdeologiesContainer").style.display = "none";
+      const detailContainer = document.getElementById("ideologyDetailContainer");
+      const detailContent = document.getElementById("ideologyDetailContent");
+      const color = getCatColor(ideology.catClass);
+
+      const prosHTML = ideology.pros.map(p => `<li>${p}</li>`).join('');
+      const consHTML = ideology.cons.map(c => `<li>${c}</li>`).join('');
+      const thinkersHTML = ideology.thinkers.map(t => `
+        <div class="thinker-item">
+          <i class="fas fa-user-graduate"></i>
+          <div><strong>${t.name}</strong><br><span style="font-size:0.87rem;color:var(--text-secondary);">${t.idea}</span></div>
+        </div>
+      `).join('');
+      const examplesHTML = ideology.examples.map(e => `<span class="example-chip">${e}</span>`).join('');
+      const realWorldHTML = ideology.realWorldExamples.map(r => `<span class="example-chip">${r}</span>`).join('');
+      const booksHTML = ideology.books.map(b => `
+        <div class="book-item">
+          <i class="fas fa-book"></i>
+          <div><strong>${b.title}</strong> by ${b.author} — <span>${b.note}</span></div>
+        </div>
+      `).join('');
+
+      detailContent.innerHTML = `
+        <span class="cat-tag" style="background:rgba(77,142,255,0.1);color:${color};border:1px solid ${color}30;">${ideology.category}</span>
+        <h2 style="color:${color};">${ideology.name}</h2>
+        <p style="color:var(--text-secondary);margin-top:0.5rem;font-size:1.05rem;">${ideology.quickSummary}</p>
+
+        <div class="divider"></div>
+
+        <div class="detail-section">
+          <h3><i class="fas fa-brain"></i> Core Idea</h3>
+          <p>${ideology.coreIdea}</p>
+        </div>
+
+        <div class="detail-section">
+          <h3><i class="fas fa-lightbulb"></i> Real-Life Examples</h3>
+          <div class="examples-list">${examplesHTML}</div>
+        </div>
+
+        <div class="detail-section">
+          <h3><i class="fas fa-user-graduate"></i> Key Thinkers & Ideas</h3>
+          <div class="thinkers-list">${thinkersHTML}</div>
+        </div>
+
+        <div class="detail-section">
+          <h3><i class="fas fa-balance-scale"></i> Pros & Cons</h3>
+          <div class="pros-cons-grid">
+            <div class="pros-box">
+              <h4><i class="fas fa-check-circle"></i> Pros</h4>
+              <ul>${prosHTML}</ul>
+            </div>
+            <div class="cons-box">
+              <h4><i class="fas fa-times-circle"></i> Cons</h4>
+              <ul>${consHTML}</ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3><i class="fas fa-globe-americas"></i> Real World Examples</h3>
+          <div class="examples-list">${realWorldHTML}</div>
+        </div>
+
+        <div class="detail-section">
+          <h3><i class="fas fa-books"></i> Recommended Books</h3>
+          <div class="books-list">${booksHTML}</div>
+        </div>
+
+        <div style="margin-top:2rem;">
+          <button id="backFromIdeologyBtn" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Folders</button>
+        </div>
+      `;
+
+      detailContainer.style.display = "block";
+      detailContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      document.getElementById("backFromIdeologyBtn").addEventListener("click", () => {
+        detailContainer.style.display = "none";
+        document.getElementById("categoryIdeologiesContainer").style.display = "none";
+        window.scrollTo({ top: document.querySelector(".categories-grid").offsetTop - 100, behavior: "smooth" });
+      });
+    }
+
+    // ========================== RESET TO HOME ==========================
+    function resetToHome() {
+      document.getElementById("categoryIdeologiesContainer").style.display = "none";
+      document.getElementById("ideologyDetailContainer").style.display = "none";
+      document.getElementById("heroSection").scrollIntoView({ behavior: "smooth" });
+      document.getElementById("searchInput").value = "";
+      hideSuggestions();
+    }
+
+    // ========================== SEARCH ==========================
+    const searchInput = document.getElementById("searchInput");
+    const suggestionsBox = document.getElementById("suggestionsList");
+
+    function hideSuggestions() { suggestionsBox.style.display = "none"; }
+
+    function showSuggestions(suggestions) {
+      if (suggestions.length === 0) { hideSuggestions(); return; }
+      suggestionsBox.innerHTML = "";
+      suggestions.forEach(ideo => {
+        const div = document.createElement("div");
+        div.classList.add("suggestion-item");
+        div.innerHTML = `<i class="fas fa-arrow-right" style="color:var(--accent-blue);"></i> <span>${ideo.name}</span> <span style="font-size:0.75rem;color:var(--text-secondary);margin-left:auto;">${ideo.category}</span>`;
+        div.addEventListener("click", () => {
+          renderIdeologyPage(ideo);
+          searchInput.value = ideo.name;
+          hideSuggestions();
+        });
+        suggestionsBox.appendChild(div);
+      });
+      suggestionsBox.style.display = "block";
+    }
+
+    searchInput.addEventListener("input", (e) => {
+      const query = e.target.value.trim().toLowerCase();
+      if (query === "") { hideSuggestions(); return; }
+      const filtered = ideologiesDB.filter(ideo => ideo.name.toLowerCase().includes(query) || ideo.category.toLowerCase().includes(query));
+      showSuggestions(filtered.slice(0, 8));
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!searchInput.contains(event.target) && !suggestionsBox.contains(event.target)) hideSuggestions();
+    });
+
+    // ========================== DARK/LIGHT TOGGLE ==========================
+    const toggleBtn = document.getElementById("darkModeToggle");
+    if (localStorage.getItem("theme") === "light") { document.body.classList.add("light"); }
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("light");
+      localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
+    });
+
+    // ========================== HAMBURGER ==========================
+    const hamburger = document.getElementById("hamburgerBtn");
+    const navLinks = document.getElementById("navLinks");
+    hamburger.addEventListener("click", () => { navLinks.classList.toggle("active"); });
+    document.querySelectorAll("#navLinks a").forEach(link => {
+      link.addEventListener("click", () => { navLinks.classList.remove("active"); });
+    });
+
+    // ========================== NAV LINKS ==========================
+    document.getElementById("homeLink").addEventListener("click", (e) => { e.preventDefault(); resetToHome(); });
+    document.getElementById("ideologiesLink").addEventListener("click", (e) => {
+      e.preventDefault();
+      document.querySelector(".section-title").scrollIntoView({ behavior: "smooth" });
+      document.getElementById("categoryIdeologiesContainer").style.display = "none";
+      document.getElementById("ideologyDetailContainer").style.display = "none";
+    });
+    document.getElementById("startLearningBtn").addEventListener("click", () => {
+      document.querySelector(".section-title").scrollIntoView({ behavior: "smooth" });
+    });
+    document.getElementById("clearCategoryView").addEventListener("click", () => {
+      document.getElementById("categoryIdeologiesContainer").style.display = "none";
+      document.getElementById("ideologyDetailContainer").style.display = "none";
+    });
+    document.getElementById("closeIdeologyView").addEventListener("click", () => {
+      document.getElementById("ideologyDetailContainer").style.display = "none";
+      document.getElementById("categoryIdeologiesContainer").style.display = "none";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // ========================== INIT ==========================
+    renderCategories();
+  </script>
+</body>
+</html>
